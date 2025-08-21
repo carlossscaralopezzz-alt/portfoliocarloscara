@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prueba Hover Azul Difuminado</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #111;
+      color: #e0f0ff;
+    }
+
+    .menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 100vh;
+      background: rgba(0, 0, 255, 0.85);
+      padding-top: 60px;
+      box-sizing: border-box;
+    }
+
+    .menu a {
+      display: block;
+      width: 100%;
+      padding: 12px 20px;
+      color: #e0f0ff;
+      text-decoration: none;
+      border-bottom: 1px solid #0033cc;
+      transition: color 0.3s ease, background 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .menu a:hover {
+      color: #ccccff;
+      background: linear-gradient(90deg, rgba(0,102,255,0.1) 0%, rgba(0,102,255,0.25) 100%);
+    }
+  </style>
+</head>
+<body>
+  <nav class="menu">
+    <a href="#">Inicio</a>
+    <a href="#">Cine</a>
+    <a href="#">Carlos Cara</a>
+  </nav>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billete de ida</title>
+  <link rel="icon" type="image/png" href="logocarlos.png" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background:
+        linear-gradient(to bottom, #0066ff 2px, transparent 2px) top / 100% 10px,
+        linear-gradient(to top, #0066ff 2px, transparent 2px) bottom / 100% 10px,
+        url('billete.png') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: 'Helvetica', sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .linea-superior, .linea-inferior {
+      position: fixed;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #0066ff, #66aaff, #0066ff);
+      box-shadow: 0 0 10px rgba(0, 102, 255, 0.8);
+      animation: glow 3s ease-in-out infinite;
+      z-index: 5;
+    }
+    .linea-superior { top: 0; }
+    .linea-inferior { bottom: 0; }
+
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(0, 102, 255, 0.8);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(0, 102, 255, 1);
+      }
+    }
+
+    .video-container {
+      width: 30%;
+      max-width: 400px;
+      aspect-ratio: 16 / 9;
+      position: fixed;
+      bottom: 15px;
+      right: 120px;
+      border: 2px solid #0C00FF;
+      border-radius: 8px;
+      box-shadow:
+        0 0 12px #0C00FF,
+        0 0 25px #0C00FF,
+        0 0 50px #0C00FF,
+        0 0 75px #0C00FF;
+      background-color: rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .video-container:hover {
+      box-shadow: 0 0 25px rgba(0, 153, 255, 0.9);
+    }
+
+    /* Video móvil (abajo) */
+    .video-movil {
+      display: none;
+      width: 60%;
+      max-width: 400px;
+      margin: 40px auto 30px auto;
+      background: rgba(0, 0, 0, 0.1);
+      border: 2px solid #0C00FF;
+      border-radius: 8px;
+      box-shadow:
+        0 0 8px #0C00FF,
+        0 0 15px #0C00FF,
+        0 0 25px #0C00FF;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+      z-index: 10;
+    }
+
+    .video-movil iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .video-movil:hover {
+      box-shadow: 0 0 18px rgba(0, 153, 255, 0.9);
+    }
+
+    /* MENÚ LATERAL */
+    .menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 100vh;
+      background: rgba(0, 0, 255, 0.85);
+      color: #e0f0ff;
+      padding-top: 60px;
+      box-sizing: border-box;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 9999;
+      font-size: 18px;
+      font-family: 'Helvetica', sans-serif;
+    }
+    .menu.active {
+      transform: translateX(0);
+    }
+    .menu a {
+      display: block;
+      padding: 12px 20px;
+      color: #e0f0ff;
+      text-decoration: none;
+      border-bottom: 1px solid #0033cc;
+      transition: background 0.2s ease;
+    }
+    .menu a:hover {
+      background: rgba(0, 102, 255, 0.3);
+    }
+
+    /* HAMBURGUESA */
+    .menu-toggle {
+      cursor: pointer;
+      width: 36px;
+      height: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: fixed;
+      top: 15px;
+      left: 10px;
+      z-index: 10000;
+    }
+    .menu-toggle div {
+      height: 6px;
+      background-color: #0000FF;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+    .menu-toggle.active div:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+      background-color: #fff;
+    }
+    .menu-toggle.active div:nth-child(2) {
+      opacity: 0;
+    }
+    .menu-toggle.active div:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+      background-color: #fff;
+    }
+
+    /* MEDIA QUERY MÓVIL */
+    @media screen and (max-width: 768px) {
+      body {
+        background-image: url('billetevertical.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: center top;
+        cursor: auto;
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        margin-left: calc(-1 * env(safe-area-inset-left));
+        margin-right: calc(-1 * env(safe-area-inset-right));
+        margin-top: calc(-1 * env(safe-area-inset-top));
+        margin-bottom: calc(-1 * env(safe-area-inset-bottom));
+      }
+      .linea-superior, .linea-inferior {
+        display: none;
+      }
+      .video-container {
+        display: none;
+      }
+      .video-movil {
+        display: block;
+      }
+      main {
+        padding: 80px 20px 20px 20px !important;
+        flex: 1;
+      }
+    }
+
+    @media screen and (max-width: 430px) {
+      .video-movil {
+        width: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Menú hamburguesa -->
+  <div class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" role="button" tabindex="0">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <!-- Menú lateral -->
+  <nav class="menu" id="menu">
+    <a href="index.html">Inicio</a>
+    <a href="cine.html">Cine</a>
+    <a href="carloscara.html">Carlos Cara</a>
+  </nav>
+
+  <!-- Líneas decorativas -->
+  <div class="linea-superior"></div>
+  <div class="linea-inferior"></div>
+
+  <!-- Contenido principal -->
+  <main style="padding: 80px 20px 20px 240px; box-sizing: border-box;">
+    <!-- Tu contenido aquí -->
+  </main>
+
+  <!-- Video escritorio -->
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/VZoidK5cBr8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Video Billete de ida"></iframe>
+  </div>
+
+  <!-- Video móvil -->
+  <div class="video-movil">
+    <iframe src="https://www.youtube.com/embed/VZoidK5cBr8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Video Billete de ida"></iframe>
+  </div>
+
+  <script>
+    // Menú hamburguesa toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('menu');
+
+    menuToggle.addEventListener('click', () => {
+      menu.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+    });
+
+    menuToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        menu.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+      }
+    });
+  </script>
+</body>
+</html>

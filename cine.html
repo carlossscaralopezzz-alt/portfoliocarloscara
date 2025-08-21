@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Mapa de Enlaces de Cine</title>
+    <link rel="icon" href="logocarlos.png" type="image/png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica', sans-serif;
+            background-color: #000;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            height: 100vh;
+            width: 100vw;
+            cursor: none; /* Oculta cursor estándar en escritorio */
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 130vh; /* menos espacio abajo para scroll */
+            overflow-x: hidden;
+        }
+
+        .background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* PORTADAS PARA MÓVIL */
+        .link {
+            position: absolute;
+            width: 28vw;
+            height: 42vw;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 0 2px 1px rgba(0, 102, 255, 0.7);
+            overflow: hidden;
+            border-radius: 2px;
+        }
+
+        .link:active {
+            transform: scale(1.15);
+            box-shadow: 0 0 10px 2px rgba(0, 204, 255, 0.9);
+            z-index: 100;
+        }
+
+        .link img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* DISTRIBUCIÓN PARA MÓVIL */
+        .amor        { top: 5vh; left: 5vw; }
+        .puerta      { top: 5vh; right: 5vw; }
+        .apariencia  {
+            top: 35vh;
+            left: 50vw;
+            transform: translateX(-50%);
+            width: 30vw;
+            height: 45vw;
+        }
+        .no-salgo    { top: 75vh; left: 5vw; }
+        .billete     { top: 75vh; right: 5vw; }
+
+        /* INDICADOR TÁCTIL */
+        .touch-indicator {
+            display: none;
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, rgba(0, 204, 255, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+        }
+
+        /* VERSIÓN ESCRITORIO */
+        @media (min-width: 769px) {
+            .container {
+                height: 100vh;
+            }
+
+            .link {
+                width: 220px;
+                height: 330px;
+            }
+
+            .apariencia {
+                width: 240px;
+                height: 360px;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .amor { top: 20%; left: 10%; }
+            .puerta { top: 20%; right: 10%; }
+            .no-salgo { bottom: 10%; left: 10%; }
+            .billete { bottom: 10%; right: 10%; }
+        }
+
+        /* MENÚ LATERAL */
+        .menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background: rgba(0, 0, 255, 0.85); /* azul 0000FF con transparencia */
+            color: #e0f0ff; /* texto claro para contraste */
+            padding-top: 60px;
+            box-sizing: border-box;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 9999;
+            font-size: 18px;
+        }
+
+        .menu.active {
+            transform: translateX(0);
+        }
+
+        .menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #e0f0ff; /* texto claro */
+            text-decoration: none;
+            border-bottom: 1px solid #0033cc;
+            transition: background 0.2s ease;
+        }
+
+        .menu a:hover {
+            background: rgba(0, 102, 255, 0.3); /* azul difuminado */
+        }
+
+        /* HAMBURGUESA */
+        .menu-toggle {
+            cursor: pointer;
+            width: 36px;
+            height: 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            top: 15px;
+            left: 10px;
+            z-index: 10000;
+        }
+
+        .menu-toggle div {
+            height: 6px;
+            background-color: #0000FF; /* azul eléctrico */
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* Animación para cuando el menú está activo (líneas cruzadas) */
+        .menu-toggle.active div:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+            background-color: #fff;
+        }
+        .menu-toggle.active div:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.active div:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+            background-color: #fff;
+        }
+
+        /* Cursor azul difuminado */
+        @media (min-width: 769px) {
+          body::before {
+            content: '';
+            position: fixed;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(51, 153, 255, 0.3);
+            box-shadow: 0 0 15px 10px rgba(51, 153, 255, 0.4);
+            transform: translate(-50%, -50%);
+            transition: top 0.1s ease, left 0.1s ease;
+            z-index: 100000;
+          }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" role="button" tabindex="0">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <nav class="menu" id="menu">
+        <a href="index.html">Inicio</a>
+        <a href="cine.html">Cine</a>
+        <a href="carloscara.html">Carlos Cara</a>
+    </nav>
+
+    <div class="container">
+        <img src="cine.png" alt="Fondo" class="background" />
+
+        <a href="billete.html" class="link billete">
+            <img src="billeteportada.png" alt="Billete de Ida">
+        </a>
+        <a href="amor-tizar.html" class="link amor">
+            <img src="amortizarportada.png" alt="Amor-Tizar mi tiempo">
+        </a>
+        <a href="lapuerta.html" class="link puerta">
+            <img src="lapuertaportada.png" alt="La Puerta">
+        </a>
+        <a href="alapariencia.html" class="link apariencia">
+            <img src="laaparienciaportada.png" alt="La Apariencia">
+        </a>
+        <a href="nosalgomas.html" class="link no-salgo">
+            <img src="nosalgoportada.png" alt="No Salgo Más">
+        </a>
+    </div>
+
+    <div class="touch-indicator"></div>
+
+    <script>
+        // Adaptación táctil
+        if ('ontouchstart' in window || navigator.maxTouchPoints) {
+            document.querySelectorAll('.link').forEach(link => {
+                link.addEventListener('touchstart', function(e) {
+                    const touch = e.touches[0];
+                    const indicator = document.querySelector('.touch-indicator');
+
+                    indicator.style.display = 'block';
+                    indicator.style.left = `${touch.clientX}px`;
+                    indicator.style.top = `${touch.clientY}px`;
+
+                    if (navigator.vibrate) navigator.vibrate(10);
+                });
+
+                link.addEventListener('touchend', function() {
+                    document.querySelector('.touch-indicator').style.display = 'none';
+                });
+            });
+
+            // Bloquear zoom pero permitir scroll
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+            }, { passive: false });
+        } else {
+            // Versión desktop
+            const touchIndicator = document.querySelector('.touch-indicator');
+            if(touchIndicator) touchIndicator.remove();
+        }
+
+        // Ajustar altura del contenedor en móvil
+        function adjustContainerHeight() {
+            const container = document.querySelector('.container');
+            if (window.innerWidth <= 768) {
+                container.style.height = '130vh'; // menos espacio para scroll
+            } else {
+                container.style.height = '100vh';
+            }
+        }
+
+        window.addEventListener('resize', adjustContainerHeight);
+        adjustContainerHeight();
+
+        // Menú hamburguesa toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const menu = document.getElementById('menu');
+
+        menuToggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+
+        // Soporte teclado para accesibilidad (Enter o Space abre/cierra menú)
+        menuToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                menu.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+            }
+        });
+
+        // Cursor azul difuminado seguimiento
+        if (window.matchMedia("(min-width: 769px)").matches) {
+            const halo = document.createElement('div');
+            halo.style.position = 'fixed';
+            halo.style.pointerEvents = 'none';
+            halo.style.width = '40px';
+            halo.style.height = '40px';
+            halo.style.borderRadius = '50%';
+            halo.style.background = 'rgba(51, 153, 255, 0.3)';
+            halo.style.boxShadow = '0 0 15px 10px rgba(51, 153, 255, 0.4)';
+            halo.style.transform = 'translate(-50%, -50%)';
+            halo.style.zIndex = '100000';
+            halo.style.transition = 'top 0.1s ease, left 0.1s ease';
+            document.body.appendChild(halo);
+
+            document.addEventListener('mousemove', e => {
+                halo.style.top = e.clientY + 'px';
+                halo.style.left = e.clientX + 'px';
+            });
+        }
+    </script>
+</body>
+</html>

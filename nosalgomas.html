@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta
+        charset="UTF-8"
+    />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>No Salgo Más</title>
+    <link rel="icon" href="logocarlos.png" type="image/png">
+    <style>
+        /* RESET y BODY */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            cursor: none;
+            font-family: 'Helvetica', sans-serif;
+            background-image: url('nosalgo.png.jpg'); /* Fondo por defecto para escritorio */
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            background-attachment: fixed;
+
+            /* Safe area para eliminar bandas en iPhone 13 */
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+
+            margin-left: calc(-1 * env(safe-area-inset-left));
+            margin-right: calc(-1 * env(safe-area-inset-right));
+            margin-top: calc(-1 * env(safe-area-inset-top));
+            margin-bottom: calc(-1 * env(safe-area-inset-bottom));
+
+            /* Eliminamos la animación de fundido de entrada */
+            /* animation: fadeInBody 1.5s ease-out both; */
+        }
+
+        /* @keyframes fadeInBody {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        } */
+
+        /* LÍNEAS SUPERIOR E INFERIOR */
+        .linea-superior,
+        .linea-inferior {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #0066ff, #66aaff, #0066ff);
+            box-shadow: 0 0 10px rgba(0, 102, 255, 0.8);
+            animation: glow 3s ease-in-out infinite;
+            z-index: 5;
+        }
+        .linea-superior {
+            top: 0;
+        }
+        .linea-inferior {
+            bottom: 0;
+        }
+        @keyframes glow {
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(0, 102, 255, 0.8);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 102, 255, 1);
+            }
+        }
+
+        /* VIDEO CONTENEDOR CON NEÓN AZUL */
+        .video-web-container {
+            position: fixed;
+            bottom: 15px;
+            right: 120px;
+            width: 30%;
+            max-width: 400px;
+            z-index: 2;
+            box-sizing: border-box;
+            border: 2px solid #0C00FF; /* Azul para el neón */
+            border-radius: 8px;
+            box-shadow: 0 0 12px #0C00FF, /* Resplandor suave inicial */ 0 0 25px #0C00FF,
+            /* Resplandor más intenso */ 0 0 50px #0C00FF,
+            /* Resplandor aún mayor */ 0 0 75px #0C00FF; /* Resplandor exterior */
+        }
+        .video-web-container iframe {
+            width: 100%;
+            height: 280px;
+            border: none;
+            border-radius: 8px;
+            transition: box-shadow 0.3s ease;
+        }
+        .video-web-container iframe:hover {
+            box-shadow: 0 0 25px rgba(0, 153, 255, 0.9); /* Mantenemos el hover original */
+        }
+
+        /* MENÚ LATERAL */
+        .menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background: rgba(0, 0, 255, 0.85);
+            color: #e0f0ff;
+            padding-top: 60px;
+            box-sizing: border-box;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 9999;
+            font-size: 18px;
+        }
+        .menu.active {
+            transform: translateX(0);
+        }
+        .menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #e0f0ff;
+            text-decoration: none;
+            border-bottom: 1px solid #0033cc;
+            transition: background 0.2s ease;
+        }
+        .menu a:hover {
+            background: rgba(0, 102, 255, 0.3);
+        }
+
+        /* HAMBURGUESA */
+        .menu-toggle {
+            cursor: pointer;
+            width: 36px;
+            height: 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            top: 15px;
+            left: 10px;
+            z-index: 10000;
+        }
+        .menu-toggle div {
+            height: 6px;
+            background-color: #0000FF;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        .menu-toggle.active div:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+            background-color: #fff;
+        }
+        .menu-toggle.active div:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.active div:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+            background-color: #fff;
+        }
+
+        /* MEDIA QUERY MÓVIL */
+        @media screen and (max-width: 768px) {
+            body {
+                background-image: url('nosalgovertical.png'); /* Fondo para móvil */
+                background-size: cover; /* Asegura que cubra la pantalla verticalmente */
+                background-repeat: no-repeat;
+                background-attachment: scroll;
+                background-position: center center;
+                cursor: auto;
+
+                /* safe area para movil */
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+
+                margin-left: calc(-1 * env(safe-area-inset-left));
+                margin-right: calc(-1 * env(safe-area-inset-right));
+                margin-top: calc(-1 * env(safe-area-inset-top));
+                margin-bottom: calc(-1 * env(safe-area-inset-bottom));
+            }
+            .linea-superior,
+            .linea-inferior {
+                display: none;
+            }
+            .video-web-container {
+                width: 60%;
+                bottom: 10px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                max-width: none;
+                border: 2px solid #0C00FF; /* Azul para el neón en móvil */
+                box-shadow: 0 0 8px #0C00FF, 0 0 15px #0C00FF, 0 0 25px #0C00FF;
+            }
+            .video-web-container iframe {
+                height: 180px;
+            }
+        }
+
+        /* Cursor azul difuminado para escritorio */
+        @media (min-width: 769px) {
+            body::before {
+                content: '';
+                position: fixed;
+                pointer-events: none;
+                top: 0;
+                left: 0;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: rgba(51, 153, 255, 0.3);
+                box-shadow: 0 0 15px 10px rgba(51, 153, 255, 0.4);
+                transform: translate(-50%, -50%);
+                transition: top 0.1s ease, left 0.1s ease;
+                z-index: 100000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div
+        class="menu-toggle"
+        id="menu-toggle"
+        aria-label="Abrir menú"
+        role="button"
+        tabindex="0"
+    >
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <nav class="menu" id="menu">
+        <a href="index.html">Inicio</a>
+        <a href="cine.html">Cine</a>
+        <a href="carloscara.html">Carlos Cara</a>
+    </nav>
+
+    <div class="linea-superior"></div>
+    <div class="linea-inferior"></div>
+
+    <div class="video-web-container">
+        <iframe
+            src="https://www.youtube.com/embed/eVUI072l0tM"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            title="Video No Salgo Más"
+        >
+        </iframe>
+    </div>
+
+    <script>
+        // Menú hamburguesa toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const menu = document.getElementById('menu');
+
+        menuToggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+
+        // Soporte teclado para accesibilidad
+        menuToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                menu.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+            }
+        });
+
+        // Cursor azul difuminado seguimiento escritorio
+        if (window.matchMedia('(min-width: 769px)').matches) {
+            document.body.style.setProperty('cursor', 'none');
+            const halo = document.createElement('div');
+            halo.style.position = 'fixed';
+            halo.style.pointerEvents = 'none';
+            halo.style.width = '40px';
+            halo.style.height = '40px';
+            halo.style.borderRadius = '50%';
+            halo.style.background = 'rgba(51, 153, 255, 0.3)';
+            halo.style.boxShadow = '0 0 15px 10px rgba(51, 153, 255, 0.4)';
+            halo.style.transform = 'translate(-50%, -50%)';
+            halo.style.zIndex = '100000';
+            halo.style.transition = 'top 0.1s ease, left 0.1s ease';
+            document.body.appendChild(halo);
+
+            document.addEventListener('mousemove', (e) => {
+                halo.style.top = e.clientY + 'px';
+                halo.style.left = e.clientX + 'px';
+            });
+        }
+    </script>
+</body>
+</html>
