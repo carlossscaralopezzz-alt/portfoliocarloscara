@@ -1,4 +1,4 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -11,15 +11,26 @@
   <link href="https://fonts.googleapis.com/css2?family=New+Rocker&display=swap" rel="stylesheet" />
 
   <style>
-    /* Estilos generales */
     body {
       margin: 0;
       padding: 0;
       font-family: 'New Rocker', cursive, Helvetica, sans-serif;
       overflow-x: hidden;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="%230600F5" opacity="0.7" filter="url(%23blur)"/><defs><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter></defs></svg>') 12 12, auto;
     }
 
-    /* Pantalla de inicio */
+    /* APLICACIÓN DE FUENTE */
+    .nombre-web,
+    .pantalla-inicio span:first-child,
+    .nombre-movil,
+    .boton-web.nombre-web,
+    .boton-movil.nombre-movil {
+      font-family: 'New Rocker', cursive !important;
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+
+    /* ANIMACIÓN INICIAL */
     .pantalla-inicio {
       position: fixed;
       inset: 0;
@@ -31,13 +42,18 @@
       z-index: 1000;
       color: white;
       font-size: 3rem;
+      text-align: center;
       animation: fundido 3s ease-in-out forwards;
       text-transform: uppercase;
+      pointer-events: none;
     }
 
+    /* PORTFOLIO EN HELVETICA */
     .pantalla-inicio span:last-child {
-      font-family: Helvetica, sans-serif;
+      font-family: Helvetica, Arial, sans-serif !important;
       font-size: 1.5rem;
+      margin-top: 0.5rem;
+      letter-spacing: 2px;
     }
 
     @keyframes fundido {
@@ -46,29 +62,20 @@
       100% { opacity: 0; visibility: hidden; }
     }
 
-    /* Contenedor web (para escritorio) */
-    .web {
-      display: none;
+    /* --- FONDOS Y DEGRADADOS (FIJOS) --- */
+    .imagen-fondo-fija {
       width: 100%;
       height: 100vh;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Imagen de fondo */
-    .imagen-fondo-web {
-      width: 100%;
-      height: 100%;
       object-fit: cover;
-      position: absolute;
-      inset: 0;
+      position: fixed;
+      top: 0; left: 0;
       z-index: 1;
     }
 
-    /* Degradado animado */
-    .degradado-animado-web {
-      position: absolute;
-      inset: 0;
+    .degradado-animado-fijo {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: linear-gradient(75deg, #A0F8BD, #F7F49C, #F4CF84, #0600FF);
       background-size: 900% 900%;
       z-index: 2;
@@ -78,194 +85,94 @@
       pointer-events: none;
     }
 
-    /* Botones web (escritorio) */
-    .boton-web {
-      position: absolute;
-      z-index: 10;
-      background-color: #0600F5;
-      color: white;
-      border: none;
-      border-radius: 14px;
-      padding: 18px 30px;
-      font-size: 1.3rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: background-color 0.3s ease, color 0.3s ease;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-family: Helvetica, sans-serif;
-    }
-
-    .boton-web img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.7);
-      max-width: 80%;
-      max-height: 80%;
-      opacity: 0;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    .boton-web:hover {
-      background-color: white;
-      color: #0600F5;
-    }
-
-    .boton-web:hover span {
-      opacity: 0;
-    }
-
-    .boton-web:hover img {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    /* Posiciones específicas escritorio */
-    .boton-web.nombre-web {
-      top: 60%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: 'New Rocker', cursive !important;
-      font-size: 2.5rem;
-      z-index: 15;
-    }
-
-    .fotografia-web { top: 10%; left: 10%; }
-    .diseno-web { top: 10%; right: 10%; }
-    .cine-web { bottom: 10%; right: 10%; }
-    .motion-web { bottom: 10%; left: 10%; }
-
-    /* Versión móvil */
-    .mobile {
-      display: none;
-      width: 100%;
-      height: 100vh;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Botones móvil - mismos estilos pero diferentes posiciones */
-    .boton-mobile {
-      position: absolute;
-      z-index: 10;
-      background-color: #0600F5;
-      color: white;
-      border: none;
-      border-radius: 14px;
-      padding: 18px 30px;
-      font-size: 1.3rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: background-color 0.3s ease, color 0.3s ease;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-family: Helvetica, sans-serif;
-      width: auto;
-      max-width: 45%;
-      text-align: center;
-    }
-
-    .boton-mobile img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.7);
-      max-width: 80%;
-      max-height: 80%;
-      opacity: 0;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    .boton-mobile:hover {
-      background-color: white;
-      color: #0600F5;
-    }
-
-    .boton-mobile:hover span {
-      opacity: 0;
-    }
-
-    .boton-mobile:hover img {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    /* Posiciones específicas móvil */
-    .boton-mobile.nombre-mobile {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: 'New Rocker', cursive !important;
-      font-size: 2.5rem;
-      z-index: 15;
-      width: 80%;
-      text-align: center;
-    }
-
-    /* Distribución como antes para móvil */
-    .fotografia-mobile { top: 10%; left: 10%; }
-    .diseno-mobile { top: 10%; right: 10%; }
-    .cine-mobile { bottom: 10%; left: 10%; }
-    .motion-mobile { bottom: 10%; right: 10%; } /* Simétrico con Diseño */
-
-    /* Ajustes responsivos para móvil */
-    @media (max-width: 767px) {
-      .boton-mobile {
-        padding: 12px 18px;
-        font-size: 1rem;
-      }
-      
-      .boton-mobile.nombre-mobile {
-        font-size: 1.8rem;
-      }
-    }
-
-    /* Visor de PDF */
-    .pdf-viewer {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.9);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .pdf-viewer iframe {
-      width: 90%;
-      height: 90%;
-      border: none;
-    }
-
-    .close-pdf {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      color: white;
-      font-size: 2rem;
-      cursor: pointer;
-    }
-
     @keyframes moverDegradado {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    /* Reglas de visualización según dispositivo */
-    @media (min-width: 768px) {
-      .web { display: block !important; }
-      .mobile { display: none !important; }
+    /* BOTONES BASE */
+    .boton-web, .boton-movil {
+      background-color: #0600F5;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      text-transform: uppercase;
+      cursor: pointer;
+      z-index: 10;
     }
 
-    @media (max-width: 767px) {
-      .web { display: none !important; }
-      .mobile { display: block !important; }
+    /* --- ESCRITORIO --- */
+    .web { display: none; width: 100%; height: 100vh; position: relative; }
+    
+    .boton-web {
+      position: fixed;
+      padding: 18px 30px;
+      font-size: 1.2rem;
+      transition: background-color 0.3s, color 0.3s;
+      font-family: Helvetica, sans-serif;
+      font-weight: bold;
+    }
+
+    .boton-web img {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.7);
+      max-width: 80%; max-height: 80%;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .boton-web:hover { background-color: white; color: #0600F5; }
+    .boton-web:hover span { opacity: 0; }
+    .boton-web:hover img { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+    /* Posiciones Escritorio */
+    .boton-web.nombre-web { top: 60%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5rem; z-index: 15; }
+    .fotografia-web { top: 10%; left: 10%; }
+    .diseno-web { top: 10%; right: 10%; }
+    .cine-web { bottom: 10%; left: 10%; }
+    .motion-web { bottom: 10%; right: 10%; }
+
+    /* --- MÓVIL --- */
+    .movil { display: block; width: 100%; height: 100vh; position: relative; }
+    
+    .boton-movil {
+      position: fixed;
+      padding: 12px 18px;
+      font-size: 0.9rem;
+      font-family: Helvetica, sans-serif;
+    }
+
+    /* Posiciones Móvil */
+    .boton-movil.nombre-movil { top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.8rem; width: 80%; text-align: center; z-index: 15; }
+    .fotografia-movil { top: 7%; left: 5%; }
+    .diseno-movil { top: 7%; right: 5%; }
+    .cine-movil { bottom: 7%; left: 5%; }
+    .motion-movil { bottom: 7%; right: 5%; }
+
+    /* VISOR PDF */
+    .pdf-viewer {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .pdf-viewer iframe { width: 90%; height: 85%; border: none; }
+    .close-pdf { position: absolute; top: 20px; right: 20px; color: white; font-size: 2.5rem; cursor: pointer; }
+
+    @media (min-width: 768px) {
+      .movil { display: none !important; }
+      .web { display: block !important; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="pantalla-inicio">
     <span>CARLOS CARA</span>
     <span>PORTFOLIO</span>
@@ -273,91 +180,64 @@
 
   <div class="pdf-viewer" id="pdfViewer">
     <span class="close-pdf" onclick="closePDF()">×</span>
-    <iframe id="pdfFrame"></iframe>
+    <iframe id="pdfFrame" src=""></iframe>
   </div>
 
-  <!-- Versión Escritorio (igual que antes) -->
   <div class="web">
-    <img src="web-carlos.png" class="imagen-fondo-web">
-    <div class="degradado-animado-web"></div>
+    <img src="web-carlos.png" class="imagen-fondo-fija" alt="Fondo Web">
+    <div class="degradado-animado-fijo"></div>
 
-    <!-- FOTOGRAFÍA -->
     <button class="boton-web fotografia-web" onclick="openPDF('portfoliofotografias.pdf')">
       <span>FOTOGRAFÍA</span>
       <img src="foto-ilustracion.png">
     </button>
-
-    <!-- DISEÑO -->
+    
     <button class="boton-web diseno-web" onclick="openPDF('portfoliodiseno.pdf')">
       <span>DISEÑO GRÁFICO</span>
       <img src="diseno-ilustracion.png">
     </button>
 
-    <!-- CINE -->
-    <button class="boton-web cine-web" onclick="openPDF('portfoliocine.pdf')">
+    <button class="boton-web cine-web" onclick="window.location.href='cine.html'">
       <span>CINE</span>
       <img src="cine-ilustracion.png">
     </button>
 
-    <!-- MOTION GRAPHICS -->
     <button class="boton-web motion-web" onclick="openVimeo()">
       <span>MOTION GRAPHICS</span>
       <img src="diseno-ilustracion.png">
     </button>
 
-    <button class="boton-web nombre-web">CARLOS CARA</button>
+    <button class="boton-web nombre-web" onclick="window.location.href='carloscara.html'">
+      <span>CARLOS CARA</span>
+    </button>
   </div>
 
-  <!-- Versión Móvil -->
-  <div class="mobile">
-    <img src="web-carlos.png" class="imagen-fondo-web">
-    <div class="degradado-animado-web"></div>
+  <div class="movil">
+    <img src="homevertical.png" class="imagen-fondo-fija" alt="Fondo Móvil">
+    <div class="degradado-animado-fijo"></div>
 
-    <!-- FOTOGRAFÍA (arriba izquierda) -->
-    <button class="boton-mobile fotografia-mobile" onclick="openPDF('portfoliofotografias.pdf')">
-      <span>FOTOGRAFÍA</span>
-      <img src="foto-ilustracion.png">
-    </button>
-
-    <!-- DISEÑO (arriba derecha) -->
-    <button class="boton-mobile diseno-mobile" onclick="openPDF('portfoliodiseno.pdf')">
-      <span>DISEÑO GRÁFICO</span>
-      <img src="diseno-ilustracion.png">
-    </button>
-
-    <!-- CINE (abajo izquierda) -->
-    <button class="boton-mobile cine-mobile" onclick="openPDF('portfoliocine.pdf')">
-      <span>CINE</span>
-      <img src="cine-ilustracion.png">
-    </button>
-
-    <!-- MOTION GRAPHICS (abajo derecha - simétrico) -->
-    <button class="boton-mobile motion-mobile" onclick="openVimeo()">
-      <span>MOTION GRAPHICS</span>
-      <img src="diseno-ilustracion.png">
-    </button>
-
-    <button class="boton-mobile nombre-mobile">CARLOS CARA</button>
+    <button class="boton-movil fotografia-movil" onclick="window.open('https://www.flipsnack.com/fanzinecatalogue/portfolio-fotograf-a/full-view.html', '_blank')">FOTOGRAFÍA</button>
+    <button class="boton-movil diseno-movil" onclick="window.open('https://www.flipsnack.com/fanzinecatalogue/portfolio-carlos-cara/full-view.html', '_blank')">DISEÑO</button>
+    <button class="boton-movil cine-movil" onclick="window.location.href='cine.html'">CINE</button>
+    <button class="boton-movil motion-movil" onclick="openVimeo()">MOTION</button>
+    
+    <button class="boton-movil nombre-movil" onclick="window.location.href='carloscara.html'">CARLOS CARA</button>
   </div>
 
   <script>
-    function openPDF(pdf) {
-      document.getElementById("pdfViewer").style.display = "flex";
-      document.getElementById("pdfFrame").src = pdf;
+    function openPDF(path) {
+      document.getElementById('pdfFrame').src = path;
+      document.getElementById('pdfViewer').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     }
-
     function closePDF() {
-      document.getElementById("pdfViewer").style.display = "none";
-      document.getElementById("pdfFrame").src = "";
+      document.getElementById('pdfViewer').style.display = 'none';
+      document.getElementById('pdfFrame').src = '';
+      document.body.style.overflow = 'auto';
     }
-
     function openVimeo() {
-      window.open(
-        "https://vimeo.com/showcase/12058457?share=copy&fl=sm&fe=fs",
-        "_blank"
-      );
+      window.open("https://vimeo.com/showcase/12058457?share=copy&fl=sm&fe=fs", "_blank");
     }
   </script>
-
 </body>
 </html>
